@@ -1,3 +1,4 @@
+import { exepct } from 'chai';
 import * as component from '../lib/component';
 import * as dom from '../lib/dom';
 
@@ -9,8 +10,8 @@ describe('component.*', () => {
   it('throws an error if there are multiple components with the same name', () => {
     const fn = () => component.register('my-component', {});
 
-    expect(fn).not.toThrow(/already registered/); // first time
-    expect(fn).toThrow(/already registered/); // second time
+    expect(fn).not.to.throw(/already registered/); // first time
+    expect(fn).to.throw(/already registered/); // second time
   });
 
   it('throws an error if the component has an invalid name', () => {
@@ -21,7 +22,7 @@ describe('component.*', () => {
     ];
 
     fns.forEach(fn => {
-      expect(fn).toThrow(/invalid name/);
+      expect(fn).to.throw(/invalid name/);
     });
   });
 
@@ -35,7 +36,7 @@ describe('component.*', () => {
 
     component.attach(div);
 
-    expect(initialized).toBe(true);
+    expect(initialized).to.eq(true);
   });
 
   it('calls `attached` only once', () => {
@@ -49,7 +50,7 @@ describe('component.*', () => {
     component.attach(div);
     component.attach(div);
 
-    expect(count).toEqual(1);
+    expect(count).to.eql(1);
   });
 
   it('calls `detached` on all child components', () => {
@@ -64,6 +65,6 @@ describe('component.*', () => {
     component.attach(div);
     component.detach(div);
 
-    expect(called).toBe(true);
+    expect(called).to.eq(true);
   });
 });
