@@ -1,7 +1,11 @@
 import * as component from '../lib/component';
 import * as dom from '../lib/dom';
 
-describe('component module', () => {
+describe('component.*', () => {
+  beforeEach(() => {
+    component.clear();
+  });
+
   it('throws an error if there are multiple components with the same name', () => {
     const fn = () => component.register('my-component', {});
 
@@ -9,7 +13,6 @@ describe('component module', () => {
     expect(fn).toThrow(/already registered/); // second time
   });
 
-  // lower case, dash in the middle
   it('throws an error if the component has an invalid name', () => {
     const fns = [
       () => component.register('my&component', {}),
@@ -27,13 +30,40 @@ describe('component module', () => {
     let initialized = false;
 
     component.register('timer', {
-      attached(elm) { initialized = true; }
+      attached() { initialized = true; }
     });
 
-    component.initialize(div);
+    component.attach(div);
 
     expect(initialized).toBe(true);
   });
 
-  it('calls `attached` only once');
+  it('calls `attached` only once', () => {
+    const div = dom.strToElm('<div><timer></timer></div>');
+    let count = 0;
+
+    component.register('timer', {
+      attached() { count += 1; }
+    });
+
+    component.attach(div);
+    component.attach(div);
+
+    expect(count).toEqual(1);
+  });
+
+  it('calls `detached` on all child components', () => {
+    const div = dom.strToElm('<div><timer></timer></div>');
+    let called = false;
+
+    component.register('timer', {
+      attached() {},
+      detached() { called = true; }
+    });
+
+    component.attach(div);
+    component.detach(div);
+
+    expect(called).toBe(true);
+  });
 });
