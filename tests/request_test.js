@@ -22,6 +22,7 @@ describe('request', () => {
 
     expect(requests[0].method).to.eq('get');
     expect(requests[0].url).to.eq('/some-path');
+    
     requests[0].respond(200, {}, 'ok');
 
     return promise;
@@ -34,6 +35,7 @@ describe('request', () => {
 
     expect(requests[0].method).to.eq('post');
     expect(requests[0].url).to.eq('/some-path');
+
     requests[0].respond(200, {}, 'ok');
 
     return promise;
@@ -47,6 +49,7 @@ describe('request', () => {
 
     expect(requests[0].method).to.eq('post');
     expect(requests[0].url).to.eq('/some-path');
+
     requests[0].respond(
       200, 
       {'content-type': 'application/json'},
@@ -64,6 +67,7 @@ describe('request', () => {
 
     expect(requests[0].method).to.eq('post');
     expect(requests[0].url).to.eq('/some-path');
+
     requests[0].respond(
       200, 
       {'content-type': 'application/javascript'},
