@@ -265,68 +265,6 @@ describe('navigation.visit', () => {
   });
 });
 
-describe('components', () => {
-  let xhr, requests;
-
-  beforeEach(() => {
-    useFakeHistory();
-    xhr = sinon.useFakeXMLHttpRequest();
-    requests = [];
-    xhr.onCreate = xhr => requests.push(xhr);
-  });
-
-  afterEach(() => {
-    config.rootSelector = 'body';
-    restoreFakeHistory();
-    xhr.restore();
-  });
-
-  it('keeps permanent elements on page change', () => {
-    let elm = dom.strToElm('<div id="p-elm" data-reflinks="permanent">hello</div>');
-    document.body.appendChild(elm);
-
-    let promise = navigation.visit('/some-path').then(res => {
-      let permanent = document.querySelector('#p-elm');
-      expect(permanent.innerHTML).to.eq('hello');
-    });
-
-    requests[0].respond(200, {}, `
-      <html>
-        <body>
-          <div id="p-elm" data-reflinks="permanent"></div>
-        </body>
-      </html>
-    `);
-
-    return promise;
-  });
-
-  // Visiting a page that has the element, then a page that hasn't, then a page
-  // that has it again.
-  it('keeps permanent elements pages that skips it', () => {
-    let elm = dom.strToElm('<div id="p-elm" data-reflinks="permanent">hello</div>');
-    document.body.appendChild(elm);
-
-    let promise = navigation.visit('/some-path').then(res => {
-      let permanent = document.querySelector('#p-elm');
-      expect(permanent.innerHTML).to.eq('hello');
-    });
-
-    requests[0].respond(200, {}, `
-      <html>
-        <body>
-          <div id="p-elm" data-reflinks="permanent"></div>
-        </body>
-      </html>
-    `);
-
-    return promise;
-  });
-
-  it('attaches new components');
-  it('detaches old components');
-});
-
 describe('popstate', () => {
   it('sends a request if the page is not cached');
   it('restores from cache if the page is cached');
